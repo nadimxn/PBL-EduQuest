@@ -164,7 +164,7 @@
         }
 
         // Mock quest data (will be replaced with database)
-        //const allQuests = [
+        const allQuests = [
             {
                 id: 1,
                 title: 'Database Normalization Master',
@@ -345,7 +345,29 @@
                 hasPrerequisite: true,
                 popularity: 98
             }
-        ]; //
+        ]; 
+        // 🔥 ADD lecturer-created quests (from localStorage)
+const lecturerQuests = JSON.parse(localStorage.getItem('quests')) || [];
+
+// Normalize lecturer quests to match UI structure
+lecturerQuests.forEach(q => {
+    allQuests.push({
+        id: q.id,
+        title: q.title,
+        category: q.category,
+        categorySlug: q.category,        // REQUIRED for filters
+        description: q.description,
+        difficulty: q.difficulty,
+        xpReward: q.xpReward,
+        lecturer: q.lecturer,
+        deadline: q.deadline,
+        icon: q.icon,
+        accepted: false,
+        hasPrerequisite: false,
+        popularity: 50                   // default
+    });
+});
+
         
 
        // let filteredQuests = [...allQuests]; //
@@ -520,6 +542,10 @@
         function viewQuestDetail(questId) {
             window.location.href = `quest-detail.html?id=${questId}`;
         }
+window.addEventListener('DOMContentLoaded', function() {
+    loadUserData();
+    renderQuests(allQuests);
+});
 
         // Change view
         function changeView(view) {
@@ -541,5 +567,6 @@
         console.log('%c🎯 Quest Board Loaded', 'color: #667eea; font-size: 16px; font-weight: bold;');
         console.log(`%c${allQuests.length} quests available`, 'color: #764ba2; font-size: 14px;');
     </script>
+    
 </body>
 </html>
