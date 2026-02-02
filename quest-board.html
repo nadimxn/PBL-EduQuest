@@ -164,7 +164,7 @@
         }
 
         // Mock quest data (will be replaced with database)
-        const allQuests = [
+        //const allQuests = [
             {
                 id: 1,
                 title: 'Database Normalization Master',
@@ -345,9 +345,14 @@
                 hasPrerequisite: true,
                 popularity: 98
             }
-        ];
+        ]; //
+        
 
-        let filteredQuests = [...allQuests];
+       // let filteredQuests = [...allQuests]; //
+        const allQuests = JSON.parse(localStorage.getItem('quests')) || [];
+
+        renderQuests(allQuests);
+
 
         // Load user data
         function loadUserData() {

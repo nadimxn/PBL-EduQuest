@@ -349,32 +349,53 @@
             document.getElementById('xpExample').textContent = `Example: 85% × ${xp} XP = ${Math.round(xp * 0.85)} XP`;
         });
 
-        // Form submission
-        document.getElementById('questForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = {
-                title: document.getElementById('questTitle').value,
-                icon: document.getElementById('questIcon').value,
-                category: document.getElementById('category').value,
-                description: document.getElementById('description').value,
-                difficulty: document.querySelector('input[name="difficulty"]:checked').value,
-                xpReward: document.getElementById('xpReward').value,
-                deadline: document.getElementById('deadline').value,
-                allowGuild: document.getElementById('allowGuild').checked,
-                allowResubmit: document.getElementById('allowResubmit').checked,
-                requirements: document.getElementById('requirements').value,
-                rubric: document.getElementById('rubric').value
-            };
+        // Form submission (PERSIST QUEST)
+document.getElementById('questForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            console.log('Quest Data:', formData);
-            
-            alert('✓ Quest created successfully!\n\nStudents can now see and accept this quest from the Quest Board.');
-            
-            setTimeout(() => {
-                window.location.href = 'lecturer-dashboard.html';
-            }, 1000);
-        });
+    const currentUser = checkAuth(); // lecturer info
+
+    const quest = {
+        id: Date.now(),                    // unique quest ID
+        title: document.getElementById('questTitle').value,
+        icon: document.getElementById('questIcon').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value,
+        difficulty: document.querySelector('input[name="difficulty"]:checked').value,
+        xpReward: parseInt(document.getElementById('xpReward').value),
+        deadline: document.getElementById('deadline').value,
+
+        allowGuild: document.getElementById('allowGuild').checked,
+        allowResubmit: document.getElementById('allowResubmit').checked,
+
+        requirements: document.getElementById('requirements').value,
+        rubric: document.getElementById('rubric').value,
+
+        lecturerId: currentUser?.id || null,
+        lecturerName: currentUser?.name || "Lecturer",
+
+        createdAt: new Date().toISOString(),
+        status: "published"               // important for student filtering
+    };
+
+    // 🔐 Load existing quests
+    const quests = JSON.parse(localStorage.getItem('quests')) || [];
+
+    // ➕ Add new quest
+    quests.push(quest);
+
+    // 💾 Save back
+    localStorage.setItem('quests', JSON.stringify(quests));
+
+    console.log('Quest saved:', quest);
+
+    alert('✓ Quest published successfully!\n\nStudents can now see this quest on the Quest Board.');
+
+    setTimeout(() => {
+        window.location.href = 'lecturer-dashboard.html';
+    }, 800);
+});
+
 
         // Save draft
         function saveDraft() {
