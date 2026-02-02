@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - EduQuest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .logout-btn {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e04556;
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Profile Header Card */
+        .profile-header-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 0;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-top {
+            display: flex;
+            gap: 30px;
+            align-items: start;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar-section {
+            text-align: center;
+        }
+
+        .profile-avatar-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            margin: 0 auto 15px;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-avatar-large:hover {
+            transform: scale(1.05);
+        }
+
+        .change-avatar-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .change-avatar-btn:hover {
+            background: #764ba2;
+        }
+
+        .profile-info {
+            flex: 1;
+            color: white;
+        }
+
+        .profile-name {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .profile-display-name {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .profile-stats-row {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .profile-stat {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .profile-stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .profile-stat-label {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* XP Progress Bar */
+        .xp-progress-section {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+        }
+
+        .xp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar-container {
+            background: rgba(255, 255, 255, 0.3);
+            height: 25px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #ffd89b 0%, #19547b 100%);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            font-weight: bold;
+            font-size: 13px;
+            transition: width 1s ease;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-header h2 {
+            font-size: 24px;
+            color: #333;
+            flex: 1;
+        }
+
+        .card-header-icon {
+            font-size: 28px;
+        }
+
+        /* Achievements Grid */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+        }
+
+        .achievement-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .achievement-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+            border-color: #ffd700;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .achievement-icon-large {
+            font-size: 48px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .achievement-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .achievement-date {
+            font-size: 10px;
+            color: #667eea;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        /* Activity Timeline */
+        .activity-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .activity-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #e0e0e0;
+        }
+
+        .activity-item {
+            position: relative;
+            padding-bottom: 25px;
+        }
+
+        .activity-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .activity-content {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .activity-content strong {
+            color: #667eea;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .stat-box-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .stat-box-label {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .stat-box-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        /* Skills Section */
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .skill-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .skill-level {
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .skill-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        /* Guild Badge */
+        .guild-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .guild-icon-large {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .guild-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .guild-rank {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .profile-name {
+                font-size: 28px;
+            }
+
+            .profile-stats-row {
+                flex-direction: column;
+            }
+
+            .achievements-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">
+                <span>🎮</span>
+                <span>EduQuest</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="student-dashboard.html">Dashboard</a></li>
+                <li><a href="quest-board.html">Quest Board</a></li>
+                <li><a href="my-quests.html">My Quests</a></li>
+                <li><a href="guild.html">Guild</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <button class="back-btn" onclick="window.history.back()">
+                ← Back
+            </button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Profile Header Card -->
+        <div class="profile-header-card">
+            <div class="profile-content">
+                <div class="profile-top">
+                    <div class="profile-avatar-section">
+                        <div class="profile-avatar-large" id="profileAvatar">⚔️</div>
+                        <button class="change-avatar-btn" onclick="changeAvatar()">Change Avatar</button>
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name" id="profileName">Alex Johnson</h1>
+                        <p class="profile-display-name" id="displayName">"DragonSlayer"</p>
+                        <div class="profile-stats-row">
+                            <div class="profile-stat">
+                                <span class="profile-stat-value" id="profileLevel">7</span>
+                                <span class="profile-stat-label">Level</span>
+                            </div>
+                            <div class="profile-stat">
+                                <span class="profile-stat-value" id="profileXP">1,850</span>
+                                <span class="profile-stat-label">Total XP</span>
+                            </div>
+                            <div class="profile-stat">
+                                <span class="profile-stat-value" id="profileRank">#2</span>
+                                <span class="profile-stat-label">Global Rank</span>
+                            </div>
+                            <div class="profile-stat">
+                                <span class="profile-stat-value" id="streakDays">7</span>
+                                <span class="profile-stat-label">Day Streak</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="xp-progress-section">
+                    <div class="xp-header">
+                        <span style="font-size: 18px; font-weight: 600;">Level Progress</span>
+                        <span id="xpText">1,850 / 2,000 XP</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="xpProgressBar" style="width: 92.5%">92.5%</div>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 14px; opacity: 0.9;">
+                        150 XP needed to reach Level 8
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Achievements Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span class="card-header-icon">🏆</span>
+                        <h2>Achievements</h2>
+                        <span style="color: #999; font-size: 14px;">5 / 12 Unlocked</span>
+                    </div>
+                    <div class="achievements-grid">
+                        <div class="achievement-item unlocked">
+                            <span class="achievement-icon-large">🎯</span>
+                            <div class="achievement-name">First Quest</div>
+                            <div class="achievement-desc">Complete your first quest</div>
+                            <div class="achievement-date">Unlocked 3 weeks ago</div>
+                        </div>
+
+                        <div class="achievement-item unlocked">
+                            <span class="achievement-icon-large">⚡</span>
+                            <div class="achievement-name">Speed Demon</div>
+                            <div class="achievement-desc">Submit 5 quests early</div>
+                            <div class="achievement-date">Unlocked 2 weeks ago</div>
+                        </div>
+
+                        <div class="achievement-item unlocked">
+                            <span class="achievement-icon-large">👑</span>
+                            <div class="achievement-name">Guild Master</div>
+                            <div class="achievement-desc">Create a guild</div>
+                            <div class="achievement-date">Unlocked 2 weeks ago</div>
+                        </div>
+
+                        <div class="achievement-item unlocked">
+                            <span class="achievement-icon-large">📚</span>
+                            <div class="achievement-name">Scholar</div>
+                            <div class="achievement-desc">Complete 10 quests</div>
+                            <div class="achievement-date">Unlocked 1 week ago</div>
+                        </div>
+
+                        <div class="achievement-item unlocked">
+                            <span class="achievement-icon-large">🔥</span>
+                            <div class="achievement-name">On Fire</div>
+                            <div class="achievement-desc">7 day streak</div>
+                            <div class="achievement-date">Unlocked today</div>
+                        </div>
+
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon-large">💯</span>
+                            <div class="achievement-name">Perfect Score</div>
+                            <div class="achievement-desc">Get 100% on a quest</div>
+                        </div>
+
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon-large">🤝</span>
+                            <div class="achievement-name">Team Player</div>
+                            <div class="achievement-desc">Help 5 guild members</div>
+                        </div>
+
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon-large">🌟</span>
+                            <div class="achievement-name">Rising Star</div>
+                            <div class="achievement-desc">Reach Level 10</div>
+                        </div>
+
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon-large">💎</span>
+                            <div class="achievement-name">Diamond League</div>
+                            <div class="achievement-desc">Reach top 5 in leaderboard</div>
+                        </div>
+
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon-large">🎓</span>
+                            <div class="achievement-name">Master Scholar</div>
+                            <div class="achievement-desc">Complete 50 quests</div>
+                        </div>
+
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon-large">🚀</span>
+                            <div class="achievement-name">Speedrunner</div>
+                            <div class="achievement-desc">Complete quest in record time</div>
+                        </div>
+
+                        <div class="achievement-item locked">
+                            <span class="achievement-icon-large">👹</span>
+                            <div class="achievement-name">Boss Slayer</div>
+                            <div class="achievement-desc">Complete 5 Epic quests</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span class="card-header-icon">📅</span>
+                        <h2>Recent Activity</h2>
+                    </div>
+                    <div class="activity-timeline">
+                        <div class="activity-item">
+                            <div class="activity-time">2 hours ago</div>
+                            <div class="activity-content">
+                                Unlocked achievement <strong>🔥 On Fire</strong>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">5 hours ago</div>
+                            <div class="activity-content">
+                                Submitted quest <strong>Database Normalization Master</strong>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">Yesterday</div>
+                            <div class="activity-content">
+                                Earned <strong>250 XP</strong> from completing CSS Animation Workshop
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">2 days ago</div>
+                            <div class="activity-content">
+                                Accepted new quest <strong>JavaScript Algorithm Challenge</strong>
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">3 days ago</div>
+                            <div class="activity-content">
+                                Invited <strong>Emma Davis</strong> to join The Code Warriors guild
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">1 week ago</div>
+                            <div class="activity-content">
+                                Unlocked achievement <strong>📚 Scholar</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div>
+                <!-- Stats Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span class="card-header-icon">📊</span>
+                        <h2>Statistics</h2>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-box-icon">✅</span>
+                            <span class="stat-box-value">12</span>
+                            <span class="stat-box-label">Completed Quests</span>
+                        </div>
+
+                        <div class="stat-box">
+                            <span class="stat-box-icon">🔥</span>
+                            <span class="stat-box-value">3</span>
+                            <span class="stat-box-label">Active Quests</span>
+                        </div>
+
+                        <div class="stat-box">
+                            <span class="stat-box-icon">⏱️</span>
+                            <span class="stat-box-value">42h</span>
+                            <span class="stat-box-label">Time Invested</span>
+                        </div>
+
+                        <div class="stat-box">
+                            <span class="stat-box-icon">📈</span>
+                            <span class="stat-box-value">88%</span>
+                            <span class="stat-box-label">Avg. Score</span>
+                        </div>
+
+                        <div class="stat-box">
+                            <span class="stat-box-icon">🎯</span>
+                            <span class="stat-box-value">92%</span>
+                            <span class="stat-box-label">On-Time Rate</span>
+                        </div>
+
+                        <div class="stat-box">
+                            <span class="stat-box-icon">🏆</span>
+                            <span class="stat-box-value">5</span>
+                            <span class="stat-box-label">Achievements</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guild Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span class="card-header-icon">⚔️</span>
+                        <h2>Guild</h2>
+                    </div>
+                    <div class="guild-badge">
+                        <div class="guild-icon-large">⚔️</div>
+                        <div class="guild-name">The Code Warriors</div>
+                        <div class="guild-rank">Rank #3 • Guild Leader</div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-box-value">5</span>
+                            <span class="stat-box-label">Members</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-box-value">9,800</span>
+                            <span class="stat-box-label">Guild XP</span>
+                        </div>
+                    </div>
+                    <button style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer;" onclick="window.location.href='guild.html'">
+                        View Guild →
+                    </button>
+                </div>
+
+                <!-- Skills Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <span class="card-header-icon">📖</span>
+                        <h2>Skills</h2>
+                    </div>
+                    <div class="skills-list">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Database Design</span>
+                                <span class="skill-level">Level 7</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Web Development</span>
+                                <span class="skill-level">Level 6</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-fill" style="width: 70%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Programming</span>
+                                <span class="skill-level">Level 5</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <span class="skill-name">Algorithms</span>
+                                <span class="skill-level">Level 4</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-fill" style="width: 45%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'student-login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'student-login.html';
+        }
+
+        // Mock profile data
+        const profileData = {
+            1: { 
+                name: 'Alex Johnson', 
+                displayName: 'DragonSlayer', 
+                level: 7, 
+                currentXP: 1850, 
+                maxXP: 2000, 
+                rank: 2,
+                streak: 7,
+                avatar: '⚔️'
+            },
+            2: { 
+                name: 'Sarah Williams', 
+                displayName: 'CodeMaster', 
+                level: 10, 
+                currentXP: 2500, 
+                maxXP: 3000, 
+                rank: 1,
+                streak: 15,
+                avatar: '👑'
+            }
+        };
+
+        // Load profile
+        function loadProfile() {
+            const user = checkAuth();
+            if (!user) return;
+
+            const profile = profileData[user.id] || profileData[1];
+
+            document.getElementById('profileName').textContent = profile.name;
+            document.getElementById('displayName').textContent = `"${profile.displayName}"`;
+            document.getElementById('profileLevel').textContent = profile.level;
+            document.getElementById('profileXP').textContent = profile.currentXP.toLocaleString();
+            document.getElementById('profileRank').textContent = `#${profile.rank}`;
+            document.getElementById('streakDays').textContent = profile.streak;
+            document.getElementById('profileAvatar').textContent = profile.avatar;
+
+            const xpPercentage = (profile.currentXP / profile.maxXP * 100).toFixed(1);
+            document.getElementById('xpText').textContent = `${profile.currentXP.toLocaleString()} / ${profile.maxXP.toLocaleString()} XP`;
+            document.getElementById('xpProgressBar').style.width = xpPercentage + '%';
+            document.getElementById('xpProgressBar').textContent = xpPercentage + '%';
+        }
+
+        // Change avatar
+        function changeAvatar() {
+            const avatars = ['⚔️', '👑', '🛡️', '🎨', '⚡', '🔮', '🥷', '✨', '💻', '👸'];
+            const current = document.getElementById('profileAvatar').textContent;
+            const currentIndex = avatars.indexOf(current);
+            const nextIndex = (currentIndex + 1) % avatars.length;
+            document.getElementById('profileAvatar').textContent = avatars[nextIndex];
+            alert('Avatar updated! ✓');
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            loadProfile();
+        });
+
+        console.log('%c👤 Profile Loaded', 'color: #667eea; font-size: 16px; font-weight: bold;');
+    </script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Dashboard - EduQuest</title>
+    <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">
+                <span>🎓</span>
+                <span>EduQuest</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="lecturer-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="create-quest.html">Create Quest</a></li>
+                <li><a href="grade-submission.html">Grade Submissions</a></li>
+                <li><a href="analytics.html">Analytics</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="user-profile">
+                <div class="user-avatar">🎓</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Dr. Sarah Chen</div>
+                    <div class="user-title">Associate Professor</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-header">
+                <div class="welcome-text">
+                    <h1>Welcome back, Dr. Chen! 🎓</h1>
+                    <p>Here's what's happening with your quests today</p>
+                </div>
+                <div class="quick-actions">
+                    <button class="action-btn action-btn-primary" onclick="window.location.href='create-quest.html'">
+                        ➕ Create Quest
+                    </button>
+                    <button class="action-btn action-btn-secondary" onclick="window.location.href='grade-submission.html'">
+                        ✅ Grade Submissions
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📤</div>
+                    <span class="stat-trend up">+3 new</span>
+                </div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">Pending Submissions</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">🎯</div>
+                    <span class="stat-trend">Active</span>
+                </div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Active Quests</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">👥</div>
+                    <span class="stat-trend up">+5 today</span>
+                </div>
+                <div class="stat-value">125</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📊</div>
+                    <span class="stat-trend up">+2%</span>
+                </div>
+                <div class="stat-value">87%</div>
+                <div class="stat-label">Avg. Completion Rate</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Pending Submissions Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">📤</span>
+                            <h2>Pending Submissions</h2>
+                        </div>
+                        <a href="grade-submission.html" class="view-all-link">View All →</a>
+                    </div>
+
+                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=1'">
+                        <div class="submission-header">
+                            <div class="submission-student">
+                                <div class="student-avatar">⚔️</div>
+                                <div class="student-info">
+                                    <h3>Alex Johnson</h3>
+                                    <p>Level 7 • DragonSlayer</p>
+                                </div>
+                            </div>
+                            <span class="submission-time">2 hours ago</span>
+                        </div>
+                        <div class="submission-quest">
+                            📊 <strong>Database Normalization Master</strong>
+                        </div>
+                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(1)">
+                            Grade Now
+                        </button>
+                    </div>
+
+                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=2'">
+                        <div class="submission-header">
+                            <div class="submission-student">
+                                <div class="student-avatar">🎨</div>
+                                <div class="student-info">
+                                    <h3>Emma Davis</h3>
+                                    <p>Level 5 • PixelQueen</p>
+                                </div>
+                            </div>
+                            <span class="submission-time">5 hours ago</span>
+                        </div>
+                        <div class="submission-quest">
+                            💾 <strong>SQL Query Mastery</strong>
+                        </div>
+                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(2)">
+                            Grade Now
+                        </button>
+                    </div>
+
+                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=3'">
+                        <div class="submission-header">
+                            <div class="submission-student">
+                                <div class="student-avatar">⚡</div>
+                                <div class="student-info">
+                                    <h3>John Smith</h3>
+                                    <p>Level 4 • SpeedDemon</p>
+                                </div>
+                            </div>
+                            <span class="submission-time">Yesterday</span>
+                        </div>
+                        <div class="submission-quest">
+                            📊 <strong>Database Design Fundamentals</strong>
+                        </div>
+                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(3)">
+                            Grade Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Quests Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">🎯</span>
+                            <h2>Active Quests</h2>
+                        </div>
+                        <a href="create-quest.html" class="view-all-link">Create New →</a>
+                    </div>
+
+                    <div class="quest-item">
+                        <div class="quest-header-row">
+                            <div class="quest-title">Database Normalization Master</div>
+                        </div>
+                        <div class="quest-meta">
+                            <span class="meta-badge">⚔️ Hard</span>
+                            <span class="meta-badge">⭐ 350 XP</span>
+                            <span class="meta-badge">👥 32 enrolled</span>
+                            <span class="meta-badge">⏰ Due in 3 days</span>
+                        </div>
+                    </div>
+
+                    <div class="quest-item">
+                        <div class="quest-header-row">
+                            <div class="quest-title">SQL Query Mastery</div>
+                        </div>
+                        <div class="quest-meta">
+                            <span class="meta-badge">⚔️ Hard</span>
+                            <span class="meta-badge">⭐ 400 XP</span>
+                            <span class="meta-badge">👥 28 enrolled</span>
+                            <span class="meta-badge">⏰ Due in 1 week</span>
+                        </div>
+                    </div>
+
+                    <div class="quest-item">
+                        <div class="quest-header-row">
+                            <div class="quest-title">Database Design Fundamentals</div>
+                        </div>
+                        <div class="quest-meta">
+                            <span class="meta-badge">🟢 Easy</span>
+                            <span class="meta-badge">⭐ 150 XP</span>
+                            <span class="meta-badge">👥 45 enrolled</span>
+                            <span class="meta-badge">⏰ Due in 2 weeks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div>
+                <!-- Recent Activity Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">📅</span>
+                            <h2>Recent Activity</h2>
+                        </div>
+                    </div>
+                    <div class="activity-feed">
+                        <div class="activity-item">
+                            <div class="activity-time">10 minutes ago</div>
+                            <div class="activity-text">
+                                <strong>Alex Johnson</strong> submitted Database Normalization Master
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">1 hour ago</div>
+                            <div class="activity-text">
+                                <strong>Emma Davis</strong> accepted SQL Query Mastery
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">2 hours ago</div>
+                            <div class="activity-text">
+                                <strong>Sarah Williams</strong> earned 350 XP from Database Project
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">3 hours ago</div>
+                            <div class="activity-text">
+                                <strong>Mike Chen</strong> submitted SQL Query Mastery
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">5 hours ago</div>
+                            <div class="activity-text">
+                                <strong>John Smith</strong> accepted Database Design Fundamentals
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">Yesterday</div>
+                            <div class="activity-text">
+                                <strong>15 students</strong> completed Database Fundamentals
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Students Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">🏆</span>
+                            <h2>Top Students</h2>
+                        </div>
+                    </div>
+                    <div class="student-list">
+                        <div class="student-item">
+                            <div class="student-avatar">👑</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Sarah Williams</div>
+                                <div class="student-level">Level 10</div>
+                            </div>
+                            <div class="student-xp">2,500 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">⚔️</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Alex Johnson</div>
+                                <div class="student-level">Level 7</div>
+                            </div>
+                            <div class="student-xp">1,850 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">🛡️</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Mike Chen</div>
+                                <div class="student-level">Level 6</div>
+                            </div>
+                            <div class="student-xp">1,200 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">🎨</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Emma Davis</div>
+                                <div class="student-level">Level 5</div>
+                            </div>
+                            <div class="student-xp">950 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">⚡</div>
+                            <div class="student-item-info">
+                                <div class="student-name">John Smith</div>
+                                <div class="student-level">Level 4</div>
+                            </div>
+                            <div class="student-xp">600 XP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'lecturer-login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'lecturer-login.html';
+        }
+
+        // Grade submission
+        function gradeSubmission(id) {
+            window.location.href = `grade-submission.html?id=${id}`;
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+        });
+
+        console.log('%c🎓 Lecturer Dashboard Loaded', 'color: #f5576c; font-size: 16px; font-weight: bold;');
+        console.log('%cDr. Sarah Chen - Associate Professor', 'color: #f093fb; font-size: 14px;');
+    </script>
+</body>
+</html>

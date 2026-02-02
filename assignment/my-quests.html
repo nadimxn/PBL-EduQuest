@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Quests - EduQuest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: background 0.3s;
+        }
+
+        .user-profile:hover {
+            background: #f0f0f0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .user-level {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .logout-btn {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e04556;
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-badge {
+            background: #f0f0f0;
+            color: #666;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .tab.active .tab-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Search and Sort */
+        .search-sort {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #999;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .sort-dropdown {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+            min-width: 180px;
+        }
+
+        /* Quest List */
+        .quest-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .quest-item {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .quest-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .quest-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+
+        .quest-item-left {
+            display: flex;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .quest-icon-box {
+            font-size: 40px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .quest-info {
+            flex: 1;
+        }
+
+        .quest-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .quest-item-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .difficulty-badge {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .difficulty-easy { background: #4caf50; }
+        .difficulty-medium { background: #ff9800; }
+        .difficulty-hard { background: #f44336; }
+        .difficulty-epic { background: #9c27b0; }
+
+        .quest-category {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .quest-meta-row {
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .quest-item-right {
+            text-align: right;
+        }
+
+        .xp-badge {
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-in-progress {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-submitted {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-graded {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        /* Progress Bar */
+        .progress-section {
+            margin-top: 15px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        /* Grade Display */
+        .grade-display {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .grade-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .grade-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        .feedback-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .browse-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .browse-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .quest-item-header {
+                flex-direction: column;
+            }
+
+            .quest-item-right {
+                text-align: left;
+            }
+
+            .search-sort {
+                flex-direction: column;
+            }
+
+            .sort-dropdown {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">
+                <span>🎮</span>
+                <span>EduQuest</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="student-dashboard.html">Dashboard</a></li>
+                <li><a href="quest-board.html">Quest Board</a></li>
+                <li><a href="my-quests.html" class="active">My Quests</a></li>
+                <li><a href="guild.html">Guild</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="user-profile" onclick="window.location.href='profile.html'">
+                <div class="user-avatar">⚔️</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-level" id="userLevel">Level --</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="page-header-content">
+                <h1>⚔️ My Quests</h1>
+                <div class="header-stats">
+                    <div class="stat-badge">
+                        <span>🎯</span>
+                        <span id="activeCount">3</span> Active
+                    </div>
+                    <div class="stat-badge">
+                        <span>✅</span>
+                        <span id="completedCount">12</span> Completed
+                    </div>
+                    <div class="stat-badge">
+                        <span>⭐</span>
+                        <span id="totalXP">4,250</span> XP Earned
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Container -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="all" onclick="switchTab('all')">
+                    📋 All Quests
+                    <span class="tab-badge" id="allBadge">15</span>
+                </button>
+                <button class="tab" data-tab="active" onclick="switchTab('active')">
+                    🔥 Active
+                    <span class="tab-badge" id="activeBadge">3</span>
+                </button>
+                <button class="tab" data-tab="submitted" onclick="switchTab('submitted')">
+                    📤 Submitted
+                    <span class="tab-badge" id="submittedBadge">2</span>
+                </button>
+                <button class="tab" data-tab="completed" onclick="switchTab('completed')">
+                    ✅ Completed
+                    <span class="tab-badge" id="completedBadge">10</span>
+                </button>
+            </div>
+
+            <!-- Search and Sort -->
+            <div class="search-sort">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="searchInput"
+                        placeholder="Search your quests..."
+                        oninput="filterQuests()"
+                    >
+                </div>
+                <select class="sort-dropdown" id="sortDropdown" onchange="filterQuests()">
+                    <option value="deadline">Sort by Deadline</option>
+                    <option value="xp-high">Sort by XP (High to Low)</option>
+                    <option value="xp-low">Sort by XP (Low to High)</option>
+                    <option value="progress">Sort by Progress</option>
+                    <option value="recent">Recently Added</option>
+                </select>
+            </div>
+
+            <!-- Quest List -->
+            <div class="quest-list" id="questList">
+                <!-- Quests will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'student-login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'student-login.html';
+        }
+
+        // Mock quest data
+        const myQuests = [
+            {
+                id: 1,
+                icon: '📊',
+                title: 'Database Normalization Master',
+                category: 'Database Design',
+                difficulty: 'hard',
+                xpReward: 350,
+                lecturer: 'Dr. Sarah Chen',
+                deadline: '3 days',
+                status: 'in-progress',
+                progress: 75,
+                startedDate: '5 days ago'
+            },
+            {
+                id: 2,
+                icon: '🌐',
+                title: 'Build a Portfolio Website',
+                category: 'Web Development',
+                difficulty: 'medium',
+                xpReward: 250,
+                lecturer: 'Prof. Ahmad Rahman',
+                deadline: '5 days',
+                status: 'in-progress',
+                progress: 40,
+                startedDate: '3 days ago'
+            },
+            {
+                id: 3,
+                icon: '💻',
+                title: 'JavaScript Algorithm Challenge',
+                category: 'Programming',
+                difficulty: 'medium',
+                xpReward: 300,
+                lecturer: 'Dr. Lisa Wong',
+                deadline: '7 days',
+                status: 'in-progress',
+                progress: 10,
+                startedDate: '1 day ago'
+            },
+            {
+                id: 4,
+                icon: '🎨',
+                title: 'CSS Animation Workshop',
+                category: 'Web Development',
+                difficulty: 'easy',
+                xpReward: 180,
+                lecturer: 'Prof. Ahmad Rahman',
+                deadline: 'Submitted 2 days ago',
+                status: 'submitted',
+                progress: 100,
+                startedDate: '10 days ago',
+                submittedDate: '2 days ago'
+            },
+            {
+                id: 5,
+                icon: '🐍',
+                title: 'Python Data Structures',
+                category: 'Programming',
+                difficulty: 'medium',
+                xpReward: 280,
+                lecturer: 'Dr. James Taylor',
+                deadline: 'Submitted 1 week ago',
+                status: 'submitted',
+                progress: 100,
+                startedDate: '3 weeks ago',
+                submittedDate: '1 week ago'
+            },
+            {
+                id: 6,
+                icon: '📱',
+                title: 'Mobile-First Design',
+                category: 'Web Development',
+                difficulty: 'medium',
+                xpReward: 220,
+                lecturer: 'Prof. Ahmad Rahman',
+                deadline: 'Completed',
+                status: 'completed',
+                progress: 100,
+                grade: 92,
+                xpEarned: 202,
+                feedback: 'Excellent work! Your responsive design shows great attention to detail and mobile UX best practices.',
+                completedDate: '2 weeks ago'
+            },
+            {
+                id: 7,
+                icon: '💾',
+                title: 'SQL Query Basics',
+                category: 'Database Design',
+                difficulty: 'easy',
+                xpReward: 150,
+                lecturer: 'Dr. Sarah Chen',
+                deadline: 'Completed',
+                status: 'completed',
+                progress: 100,
+                grade: 88,
+                xpEarned: 132,
+                feedback: 'Great understanding of SQL fundamentals. Try optimizing your queries further.',
+                completedDate: '3 weeks ago'
+            },
+            {
+                id: 8,
+                icon: '🔒',
+                title: 'Web Security Fundamentals',
+                category: 'Security',
+                difficulty: 'hard',
+                xpReward: 380,
+                lecturer: 'Dr. Kevin Martinez',
+                deadline: 'Completed',
+                status: 'completed',
+                progress: 100,
+                grade: 95,
+                xpEarned: 361,
+                feedback: 'Outstanding work! You demonstrated excellent understanding of security concepts.',
+                completedDate: '1 month ago'
+            }
+        ];
+
+        let currentTab = 'all';
+        let filteredQuests = [...myQuests];
+
+        // Load user data
+        function loadUserData() {
+            const user = checkAuth();
+            if (!user) return;
+
+            const studentData = {
+                1: { name: 'Alex Johnson', displayName: 'DragonSlayer', level: 7 },
+                2: { name: 'Sarah Williams', displayName: 'CodeMaster', level: 10 },
+                3: { name: 'Mike Chen', displayName: 'BugHunter', level: 6 },
+                4: { name: 'Emma Davis', displayName: 'PixelQueen', level: 5 },
+                5: { name: 'John Smith', displayName: 'SpeedDemon', level: 4 }
+            };
+
+            const data = studentData[user.id] || studentData[1];
+
+            document.getElementById('userName').textContent = data.displayName;
+            document.getElementById('userLevel').textContent = `Level ${data.level}`;
+
+            // Update stats
+            updateStats();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const active = myQuests.filter(q => q.status === 'in-progress').length;
+            const completed = myQuests.filter(q => q.status === 'completed').length;
+            const totalXP = myQuests.filter(q => q.status === 'completed')
+                .reduce((sum, q) => sum + q.xpEarned, 0);
+
+            document.getElementById('activeCount').textContent = active;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('totalXP').textContent = totalXP.toLocaleString();
+
+            // Update tab badges
+            document.getElementById('allBadge').textContent = myQuests.length;
+            document.getElementById('activeBadge').textContent = active;
+            document.getElementById('submittedBadge').textContent = myQuests.filter(q => q.status === 'submitted').length;
+            document.getElementById('completedBadge').textContent = completed;
+        }
+
+        // Switch tab
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            filterQuests();
+        }
+
+        // Filter quests
+        function filterQuests() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const sortBy = document.getElementById('sortDropdown').value;
+
+            // Filter by tab
+            let quests = myQuests;
+            if (currentTab === 'active') {
+                quests = myQuests.filter(q => q.status === 'in-progress');
+            } else if (currentTab === 'submitted') {
+                quests = myQuests.filter(q => q.status === 'submitted');
+            } else if (currentTab === 'completed') {
+                quests = myQuests.filter(q => q.status === 'completed');
+            }
+
+            // Filter by search
+            if (searchTerm) {
+                quests = quests.filter(q => 
+                    q.title.toLowerCase().includes(searchTerm) ||
+                    q.category.toLowerCase().includes(searchTerm) ||
+                    q.lecturer.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // Sort
+            if (sortBy === 'xp-high') {
+                quests.sort((a, b) => b.xpReward - a.xpReward);
+            } else if (sortBy === 'xp-low') {
+                quests.sort((a, b) => a.xpReward - b.xpReward);
+            } else if (sortBy === 'progress') {
+                quests.sort((a, b) => b.progress - a.progress);
+            }
+
+            filteredQuests = quests;
+            renderQuests();
+        }
+
+        // Render quests
+        function renderQuests() {
+            const questList = document.getElementById('questList');
+
+            if (filteredQuests.length === 0) {
+                questList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <h3>No quests found</h3>
+                        <p>Time to embark on a new adventure!</p>
+                        <button class="browse-btn" onclick="window.location.href='quest-board.html'">
+                            Browse Quest Board
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            questList.innerHTML = filteredQuests.map(quest => `
+                <div class="quest-item" onclick="window.location.href='quest-detail.html?id=${quest.id}'">
+                    <div class="quest-item-header">
+                        <div class="quest-item-left">
+                            <div class="quest-icon-box">${quest.icon}</div>
+                            <div class="quest-info">
+                                <div class="quest-title-row">
+                                    <span class="quest-item-title">${quest.title}</span>
+                                    <span class="difficulty-badge difficulty-${quest.difficulty}">
+                                        ${quest.difficulty.toUpperCase()}
+                                    </span>
+                                </div>
+                                <div class="quest-category">📚 ${quest.category}</div>
+                                <div class="quest-meta-row">
+                                    <div class="meta-item">
+                                        <span>👤</span>
+                                        <span>${quest.lecturer}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>⏰</span>
+                                        <span>${quest.deadline}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <span>📅</span>
+                                        <span>Started ${quest.startedDate}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quest-item-right">
+                            <div class="xp-badge">⭐ ${quest.xpReward} XP</div>
+                            <span class="status-badge status-${quest.status}">
+                                ${quest.status === 'in-progress' ? '🔄 In Progress' : 
+                                  quest.status === 'submitted' ? '📤 Submitted' : 
+                                  '✅ Completed'}
+                            </span>
+                        </div>
+                    </div>
+
+                    ${quest.status === 'in-progress' ? `
+                        <div class="progress-section">
+                            <div class="progress-header">
+                                <span>Progress</span>
+                                <span>${quest.progress}%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${quest.progress}%"></div>
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    ${quest.status === 'completed' ? `
+                        <div class="grade-display">
+                            <div class="grade-header">
+                                <span style="font-weight: 600; color: #333;">Final Grade</span>
+                                <span class="grade-score">${quest.grade}%</span>
+                            </div>
+                            <div class="meta-item" style="margin-bottom: 8px;">
+                                <span>⭐</span>
+                                <span>XP Earned: <strong>${quest.xpEarned}</strong></span>
+                            </div>
+                            <div class="feedback-text">
+                                <strong>Feedback:</strong> ${quest.feedback}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            filterQuests();
+        });
+
+        console.log('%c⚔️ My Quests Loaded', 'color: #667eea; font-size: 16px; font-weight: bold;');
+        console.log(`%c${myQuests.length} total quests`, 'color: #764ba2; font-size: 14px;');
+    </script>
+</body>
+</html>

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Dashboard - EduQuest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #f5576c;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: #f0f0f0;
+            color: #f5576c;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: background 0.3s;
+        }
+
+        .user-profile:hover {
+            background: #f0f0f0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .user-title {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .logout-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .welcome-text h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .welcome-text p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: white;
+            color: #f5576c;
+            border: 2px solid #f5576c;
+        }
+
+        .action-btn-secondary:hover {
+            background: #f5576c;
+            color: white;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            animation: fadeIn 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            font-size: 40px;
+        }
+
+        .stat-trend {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .stat-trend.up {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .stat-trend.down {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header h2 {
+            font-size: 22px;
+            color: #333;
+        }
+
+        .card-header-icon {
+            font-size: 28px;
+        }
+
+        .view-all-link {
+            color: #f5576c;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .view-all-link:hover {
+            color: #f093fb;
+        }
+
+        /* Submission Item */
+        .submission-item {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #f5576c;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .submission-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .submission-student {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .student-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .student-info h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .student-info p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .submission-time {
+            font-size: 12px;
+            color: #999;
+            background: #e9ecef;
+            padding: 5px 12px;
+            border-radius: 12px;
+        }
+
+        .submission-quest {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .grade-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .grade-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Quest Item */
+        .quest-item {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .quest-item:hover {
+            border-color: #f5576c;
+            transform: translateX(5px);
+        }
+
+        .quest-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .quest-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .quest-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 13px;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .meta-badge {
+            background: white;
+            padding: 5px 12px;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border-left: 3px solid #f5576c;
+        }
+
+        .activity-time {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .activity-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .activity-text strong {
+            color: #333;
+        }
+
+        /* Student List */
+        .student-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .student-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .student-item:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .student-item-info {
+            flex: 1;
+        }
+
+        .student-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .student-level {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .student-xp {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f5576c;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">
+                <span>🎓</span>
+                <span>EduQuest</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="lecturer-dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="create-quest.html">Create Quest</a></li>
+                <li><a href="grade-submission.html">Grade Submissions</a></li>
+                <li><a href="analytics.html">Analytics</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="user-profile">
+                <div class="user-avatar">🎓</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Dr. Sarah Chen</div>
+                    <div class="user-title">Associate Professor</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <div class="welcome-header">
+                <div class="welcome-text">
+                    <h1>Welcome back, Dr. Chen! 🎓</h1>
+                    <p>Here's what's happening with your quests today</p>
+                </div>
+                <div class="quick-actions">
+                    <button class="action-btn action-btn-primary" onclick="window.location.href='create-quest.html'">
+                        ➕ Create Quest
+                    </button>
+                    <button class="action-btn action-btn-secondary" onclick="window.location.href='grade-submission.html'">
+                        ✅ Grade Submissions
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📤</div>
+                    <span class="stat-trend up">+3 new</span>
+                </div>
+                <div class="stat-value">8</div>
+                <div class="stat-label">Pending Submissions</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">🎯</div>
+                    <span class="stat-trend">Active</span>
+                </div>
+                <div class="stat-value">12</div>
+                <div class="stat-label">Active Quests</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">👥</div>
+                    <span class="stat-trend up">+5 today</span>
+                </div>
+                <div class="stat-value">125</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon">📊</div>
+                    <span class="stat-trend up">+2%</span>
+                </div>
+                <div class="stat-value">87%</div>
+                <div class="stat-label">Avg. Completion Rate</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Pending Submissions Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">📤</span>
+                            <h2>Pending Submissions</h2>
+                        </div>
+                        <a href="grade-submission.html" class="view-all-link">View All →</a>
+                    </div>
+
+                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=1'">
+                        <div class="submission-header">
+                            <div class="submission-student">
+                                <div class="student-avatar">⚔️</div>
+                                <div class="student-info">
+                                    <h3>Alex Johnson</h3>
+                                    <p>Level 7 • DragonSlayer</p>
+                                </div>
+                            </div>
+                            <span class="submission-time">2 hours ago</span>
+                        </div>
+                        <div class="submission-quest">
+                            📊 <strong>Database Normalization Master</strong>
+                        </div>
+                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(1)">
+                            Grade Now
+                        </button>
+                    </div>
+
+                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=2'">
+                        <div class="submission-header">
+                            <div class="submission-student">
+                                <div class="student-avatar">🎨</div>
+                                <div class="student-info">
+                                    <h3>Emma Davis</h3>
+                                    <p>Level 5 • PixelQueen</p>
+                                </div>
+                            </div>
+                            <span class="submission-time">5 hours ago</span>
+                        </div>
+                        <div class="submission-quest">
+                            💾 <strong>SQL Query Mastery</strong>
+                        </div>
+                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(2)">
+                            Grade Now
+                        </button>
+                    </div>
+
+                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=3'">
+                        <div class="submission-header">
+                            <div class="submission-student">
+                                <div class="student-avatar">⚡</div>
+                                <div class="student-info">
+                                    <h3>John Smith</h3>
+                                    <p>Level 4 • SpeedDemon</p>
+                                </div>
+                            </div>
+                            <span class="submission-time">Yesterday</span>
+                        </div>
+                        <div class="submission-quest">
+                            📊 <strong>Database Design Fundamentals</strong>
+                        </div>
+                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(3)">
+                            Grade Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Quests Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">🎯</span>
+                            <h2>Active Quests</h2>
+                        </div>
+                        <a href="create-quest.html" class="view-all-link">Create New →</a>
+                    </div>
+
+                    <div class="quest-item">
+                        <div class="quest-header-row">
+                            <div class="quest-title">Database Normalization Master</div>
+                        </div>
+                        <div class="quest-meta">
+                            <span class="meta-badge">⚔️ Hard</span>
+                            <span class="meta-badge">⭐ 350 XP</span>
+                            <span class="meta-badge">👥 32 enrolled</span>
+                            <span class="meta-badge">⏰ Due in 3 days</span>
+                        </div>
+                    </div>
+
+                    <div class="quest-item">
+                        <div class="quest-header-row">
+                            <div class="quest-title">SQL Query Mastery</div>
+                        </div>
+                        <div class="quest-meta">
+                            <span class="meta-badge">⚔️ Hard</span>
+                            <span class="meta-badge">⭐ 400 XP</span>
+                            <span class="meta-badge">👥 28 enrolled</span>
+                            <span class="meta-badge">⏰ Due in 1 week</span>
+                        </div>
+                    </div>
+
+                    <div class="quest-item">
+                        <div class="quest-header-row">
+                            <div class="quest-title">Database Design Fundamentals</div>
+                        </div>
+                        <div class="quest-meta">
+                            <span class="meta-badge">🟢 Easy</span>
+                            <span class="meta-badge">⭐ 150 XP</span>
+                            <span class="meta-badge">👥 45 enrolled</span>
+                            <span class="meta-badge">⏰ Due in 2 weeks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div>
+                <!-- Recent Activity Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">📅</span>
+                            <h2>Recent Activity</h2>
+                        </div>
+                    </div>
+                    <div class="activity-feed">
+                        <div class="activity-item">
+                            <div class="activity-time">10 minutes ago</div>
+                            <div class="activity-text">
+                                <strong>Alex Johnson</strong> submitted Database Normalization Master
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">1 hour ago</div>
+                            <div class="activity-text">
+                                <strong>Emma Davis</strong> accepted SQL Query Mastery
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">2 hours ago</div>
+                            <div class="activity-text">
+                                <strong>Sarah Williams</strong> earned 350 XP from Database Project
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">3 hours ago</div>
+                            <div class="activity-text">
+                                <strong>Mike Chen</strong> submitted SQL Query Mastery
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">5 hours ago</div>
+                            <div class="activity-text">
+                                <strong>John Smith</strong> accepted Database Design Fundamentals
+                            </div>
+                        </div>
+
+                        <div class="activity-item">
+                            <div class="activity-time">Yesterday</div>
+                            <div class="activity-text">
+                                <strong>15 students</strong> completed Database Fundamentals
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Students Card -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-header-left">
+                            <span class="card-header-icon">🏆</span>
+                            <h2>Top Students</h2>
+                        </div>
+                    </div>
+                    <div class="student-list">
+                        <div class="student-item">
+                            <div class="student-avatar">👑</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Sarah Williams</div>
+                                <div class="student-level">Level 10</div>
+                            </div>
+                            <div class="student-xp">2,500 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">⚔️</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Alex Johnson</div>
+                                <div class="student-level">Level 7</div>
+                            </div>
+                            <div class="student-xp">1,850 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">🛡️</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Mike Chen</div>
+                                <div class="student-level">Level 6</div>
+                            </div>
+                            <div class="student-xp">1,200 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">🎨</div>
+                            <div class="student-item-info">
+                                <div class="student-name">Emma Davis</div>
+                                <div class="student-level">Level 5</div>
+                            </div>
+                            <div class="student-xp">950 XP</div>
+                        </div>
+
+                        <div class="student-item">
+                            <div class="student-avatar">⚡</div>
+                            <div class="student-item-info">
+                                <div class="student-name">John Smith</div>
+                                <div class="student-level">Level 4</div>
+                            </div>
+                            <div class="student-xp">600 XP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'lecturer-login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'lecturer-login.html';
+        }
+
+        // Grade submission
+        function gradeSubmission(id) {
+            window.location.href = `grade-submission.html?id=${id}`;
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+        });
+
+        console.log('%c🎓 Lecturer Dashboard Loaded', 'color: #f5576c; font-size: 16px; font-weight: bold;');
+        console.log('%cDr. Sarah Chen - Associate Professor', 'color: #f093fb; font-size: 14px;');
+    </script>
+</body>
+</html>

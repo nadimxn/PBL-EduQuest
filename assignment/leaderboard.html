@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - EduQuest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: background 0.3s;
+        }
+
+        .user-profile:hover {
+            background: #f0f0f0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .user-info {
+            text-align: left;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .user-level {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .logout-btn {
+            background: #f5576c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #e04556;
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 20px 25px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 12px 25px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        /* Podium Section */
+        .podium-section {
+            background: white;
+            padding: 40px 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .podium-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .podium-item {
+            flex: 1;
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .podium-item.second {
+            animation-delay: 0.1s;
+        }
+
+        .podium-item.first {
+            animation-delay: 0.2s;
+        }
+
+        .podium-item.third {
+            animation-delay: 0.3s;
+        }
+
+        .podium-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            position: relative;
+            border: 5px solid;
+        }
+
+        .podium-item.first .podium-avatar {
+            width: 120px;
+            height: 120px;
+            font-size: 60px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-color: #ffd700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .podium-item.second .podium-avatar {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+            border-color: #c0c0c0;
+            box-shadow: 0 8px 25px rgba(192, 192, 192, 0.4);
+        }
+
+        .podium-item.third .podium-avatar {
+            background: linear-gradient(135deg, #cd7f32 0%, #e8a87c 100%);
+            border-color: #cd7f32;
+            box-shadow: 0 8px 25px rgba(205, 127, 50, 0.4);
+        }
+
+        .podium-rank {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .podium-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .podium-level {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .podium-xp {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .podium-stand {
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px 10px 0 0;
+            padding: 20px 10px;
+            margin-top: 20px;
+        }
+
+        .podium-item.first .podium-stand {
+            height: 150px;
+            background: linear-gradient(180deg, #fff9e6 0%, #ffe6b3 100%);
+        }
+
+        .podium-item.second .podium-stand {
+            height: 120px;
+            background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+        }
+
+        .podium-item.third .podium-stand {
+            height: 100px;
+            background: linear-gradient(180deg, #fff4e6 0%, #ffd9b3 100%);
+        }
+
+        /* Filter Bar */
+        .filter-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+            min-width: 180px;
+            transition: all 0.3s;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Rankings Table */
+        .rankings-section {
+            background: white;
+            padding: 25px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .rankings-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+
+        .rankings-table thead th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .rankings-table thead th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .rankings-table thead th:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .rankings-table tbody tr {
+            background: white;
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .rankings-table tbody tr:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .rankings-table tbody tr.current-user {
+            background: linear-gradient(90deg, #fff9e6 0%, #ffffff 100%);
+            border-color: #ffd700;
+            border-width: 3px;
+        }
+
+        .rankings-table tbody td {
+            padding: 20px 15px;
+        }
+
+        .rankings-table tbody tr td:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .rankings-table tbody tr td:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .rank-cell {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+            width: 80px;
+        }
+
+        .rank-cell.top-3 {
+            font-size: 32px;
+        }
+
+        .player-cell {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .player-avatar-small {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .player-info h3 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .player-info p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .level-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .xp-cell {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .quests-cell {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .badge-icon {
+            font-size: 24px;
+        }
+
+        /* Guild Leaderboard */
+        .guild-rankings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .guild-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .guild-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .guild-card.rank-1 {
+            border-color: #ffd700;
+            background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
+        }
+
+        .guild-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .guild-rank {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .guild-icon {
+            font-size: 48px;
+        }
+
+        .guild-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .guild-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .guild-stat {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .guild-stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .guild-stat-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .podium-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .podium-item {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .rankings-table {
+                font-size: 14px;
+            }
+
+            .player-cell {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .guild-rankings {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo">
+                <span>🎮</span>
+                <span>EduQuest</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="student-dashboard.html">Dashboard</a></li>
+                <li><a href="quest-board.html">Quest Board</a></li>
+                <li><a href="my-quests.html">My Quests</a></li>
+                <li><a href="guild.html">Guild</a></li>
+                <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
+            <div class="user-profile" onclick="window.location.href='profile.html'">
+                <div class="user-avatar">⚔️</div>
+                <div class="user-info">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-level" id="userLevel">Level --</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>🏆 Leaderboard</h1>
+            <p>Compete with fellow adventurers and climb the ranks!</p>
+        </div>
+
+        <!-- Tabs Container -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="players" onclick="switchTab('players')">
+                    👤 Players
+                </button>
+                <button class="tab" data-tab="guilds" onclick="switchTab('guilds')">
+                    ⚔️ Guilds
+                </button>
+            </div>
+        </div>
+
+        <!-- Players Leaderboard -->
+        <div id="playersLeaderboard">
+            <!-- Podium Section -->
+            <div class="podium-section">
+                <div class="podium-container">
+                    <!-- Second Place -->
+                    <div class="podium-item second">
+                        <div class="podium-avatar">
+                            <div class="podium-rank">🥈</div>
+                            ⚔️
+                        </div>
+                        <div class="podium-name">Alex Johnson</div>
+                        <div class="podium-level">Level 7</div>
+                        <div class="podium-xp">1,850 XP</div>
+                        <div class="podium-stand"></div>
+                    </div>
+
+                    <!-- First Place -->
+                    <div class="podium-item first">
+                        <div class="podium-avatar">
+                            <div class="podium-rank">🥇</div>
+                            👑
+                        </div>
+                        <div class="podium-name">Sarah Williams</div>
+                        <div class="podium-level">Level 10</div>
+                        <div class="podium-xp">2,500 XP</div>
+                        <div class="podium-stand"></div>
+                    </div>
+
+                    <!-- Third Place -->
+                    <div class="podium-item third">
+                        <div class="podium-avatar">
+                            <div class="podium-rank">🥉</div>
+                            🛡️
+                        </div>
+                        <div class="podium-name">Mike Chen</div>
+                        <div class="podium-level">Level 6</div>
+                        <div class="podium-xp">1,200 XP</div>
+                        <div class="podium-stand"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rankings Section -->
+            <div class="rankings-section">
+                <div class="filter-bar">
+                    <select class="filter-select" id="timeFilter" onchange="filterRankings()">
+                        <option value="all-time">All Time</option>
+                        <option value="this-month">This Month</option>
+                        <option value="this-week">This Week</option>
+                    </select>
+                    <select class="filter-select" id="categoryFilter" onchange="filterRankings()">
+                        <option value="all">All Categories</option>
+                        <option value="database">Database Design</option>
+                        <option value="web">Web Development</option>
+                        <option value="programming">Programming</option>
+                    </select>
+                </div>
+
+                <table class="rankings-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Level</th>
+                            <th>XP</th>
+                            <th>Quests</th>
+                            <th>Badges</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingsTableBody">
+                        <!-- Rankings will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Guilds Leaderboard -->
+        <div id="guildsLeaderboard" style="display: none;">
+            <div class="rankings-section">
+                <div class="guild-rankings" id="guildRankings">
+                    <!-- Guild cards will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        function checkAuth() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'student-login.html';
+                return null;
+            }
+            return JSON.parse(currentUser);
+        }
+
+        // Logout function
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'student-login.html';
+        }
+
+        // Mock player rankings data
+        const playerRankings = [
+            { id: 1, rank: 1, name: 'Sarah Williams', displayName: 'CodeMaster', level: 10, xp: 2500, quests: 25, badges: 8, avatar: '👑' },
+            { id: 2, rank: 2, name: 'Alex Johnson', displayName: 'DragonSlayer', level: 7, xp: 1850, quests: 12, badges: 5, avatar: '⚔️' },
+            { id: 3, rank: 3, name: 'Mike Chen', displayName: 'BugHunter', level: 6, xp: 1200, quests: 10, badges: 4, avatar: '🛡️' },
+            { id: 4, rank: 4, name: 'Emma Davis', displayName: 'PixelQueen', level: 5, xp: 950, quests: 8, badges: 3, avatar: '🎨' },
+            { id: 5, rank: 5, name: 'John Smith', displayName: 'SpeedDemon', level: 4, xp: 600, quests: 6, badges: 2, avatar: '⚡' },
+            { id: 6, rank: 6, name: 'Lisa Wong', displayName: 'DataWizard', level: 8, xp: 1950, quests: 18, badges: 6, avatar: '🔮' },
+            { id: 7, rank: 7, name: 'David Kim', displayName: 'CodeNinja', level: 7, xp: 1700, quests: 15, badges: 5, avatar: '🥷' },
+            { id: 8, rank: 8, name: 'Anna Garcia', displayName: 'DevGoddess', level: 6, xp: 1450, quests: 13, badges: 4, avatar: '✨' },
+            { id: 9, rank: 9, name: 'James Taylor', displayName: 'ByteMaster', level: 5, xp: 890, quests: 9, badges: 3, avatar: '💻' },
+            { id: 10, rank: 10, name: 'Sophie Brown', displayName: 'QueryQueen', level: 4, xp: 720, quests: 7, badges: 2, avatar: '👸' }
+        ];
+
+        // Mock guild rankings data
+        const guildRankings = [
+            { rank: 1, name: 'Digital Nomads', icon: '🌐', members: 8, totalXP: 12500, quests: 45, successRate: 92 },
+            { rank: 2, name: 'Byte Busters', icon: '💾', members: 6, totalXP: 11200, quests: 38, successRate: 89 },
+            { rank: 3, name: 'The Code Warriors', icon: '⚔️', members: 5, totalXP: 9800, quests: 32, successRate: 87 },
+            { rank: 4, name: 'Pixel Pioneers', icon: '🎨', members: 7, totalXP: 8900, quests: 30, successRate: 85 },
+            { rank: 5, name: 'Data Dragons', icon: '🐉', members: 6, totalXP: 8200, quests: 28, successRate: 83 },
+            { rank: 6, name: 'Tech Titans', icon: '⚡', members: 5, totalXP: 7500, quests: 25, successRate: 81 }
+        ];
+
+        let currentTab = 'players';
+        const currentUserId = 2; // Alex Johnson
+
+        // Load user data
+        function loadUserData() {
+            const user = checkAuth();
+            if (!user) return;
+
+            const studentData = {
+                1: { name: 'Alex Johnson', displayName: 'DragonSlayer', level: 7 },
+                2: { name: 'Sarah Williams', displayName: 'CodeMaster', level: 10 },
+                3: { name: 'Mike Chen', displayName: 'BugHunter', level: 6 },
+                4: { name: 'Emma Davis', displayName: 'PixelQueen', level: 5 },
+                5: { name: 'John Smith', displayName: 'SpeedDemon', level: 4 }
+            };
+
+            const data = studentData[user.id] || studentData[1];
+
+            document.getElementById('userName').textContent = data.displayName;
+            document.getElementById('userLevel').textContent = `Level ${data.level}`;
+        }
+
+        // Switch tab
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            // Show/hide content
+            if (tab === 'players') {
+                document.getElementById('playersLeaderboard').style.display = 'block';
+                document.getElementById('guildsLeaderboard').style.display = 'none';
+            } else {
+                document.getElementById('playersLeaderboard').style.display = 'none';
+                document.getElementById('guildsLeaderboard').style.display = 'block';
+                renderGuildRankings();
+            }
+        }
+
+        // Filter rankings
+        function filterRankings() {
+            renderPlayerRankings();
+        }
+
+        // Render player rankings
+        function renderPlayerRankings() {
+            const tbody = document.getElementById('rankingsTableBody');
+            
+            tbody.innerHTML = playerRankings.map(player => `
+                <tr class="${player.id === currentUserId ? 'current-user' : ''}" onclick="window.location.href='profile.html?id=${player.id}'">
+                    <td class="rank-cell ${player.rank <= 3 ? 'top-3' : ''}">
+                        ${player.rank <= 3 ? (player.rank === 1 ? '🥇' : player.rank === 2 ? '🥈' : '🥉') : player.rank}
+                    </td>
+                    <td>
+                        <div class="player-cell">
+                            <div class="player-avatar-small">${player.avatar}</div>
+                            <div class="player-info">
+                                <h3>${player.displayName}</h3>
+                                <p>${player.name}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="level-badge">Level ${player.level}</span>
+                    </td>
+                    <td class="xp-cell">${player.xp.toLocaleString()} XP</td>
+                    <td class="quests-cell">${player.quests} quests</td>
+                    <td>
+                        <span class="badge-icon" title="${player.badges} badges">
+                            ${'🏆'.repeat(Math.min(player.badges, 3))}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Render guild rankings
+        function renderGuildRankings() {
+            const container = document.getElementById('guildRankings');
+            
+            container.innerHTML = guildRankings.map(guild => `
+                <div class="guild-card ${guild.rank === 1 ? 'rank-1' : ''}" onclick="window.location.href='guild.html?id=${guild.rank}'">
+                    <div class="guild-header">
+                        <div class="guild-rank">#${guild.rank}</div>
+                        <div class="guild-icon">${guild.icon}</div>
+                    </div>
+                    <div class="guild-name">${guild.name}</div>
+                    <div style="color: #999; font-size: 14px; margin-bottom: 15px;">
+                        👥 ${guild.members} Members
+                    </div>
+                    <div class="guild-stats">
+                        <div class="guild-stat">
+                            <div class="guild-stat-value">${guild.totalXP.toLocaleString()}</div>
+                            <div class="guild-stat-label">Total XP</div>
+                        </div>
+                        <div class="guild-stat">
+                            <div class="guild-stat-value">${guild.quests}</div>
+                            <div class="guild-stat-label">Quests</div>
+                        </div>
+                        <div class="guild-stat">
+                            <div class="guild-stat-value">${guild.successRate}%</div>
+                            <div class="guild-stat-label">Success Rate</div>
+                        </div>
+                        <div class="guild-stat">
+                            <div class="guild-stat-value">${(guild.totalXP / guild.members).toFixed(0)}</div>
+                            <div class="guild-stat-label">Avg XP</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            renderPlayerRankings();
+        });
+
+        console.log('%c🏆 Leaderboard Loaded', 'color: #667eea; font-size: 16px; font-weight: bold;');
+        console.log(`%c${playerRankings.length} players • ${guildRankings.length} guilds`, 'color: #764ba2; font-size: 14px;');
+    </script>
+</body>
+</html>
