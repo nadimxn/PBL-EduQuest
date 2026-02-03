@@ -138,23 +138,24 @@
         <div class="quests-container">
             <div class="quests-grid" id="questsGrid">
                 <!-- Quest cards will be loaded here -->
-                <div class="loading-container">
-                    <div class="spinner"></div>
-                    <p>Loading quests...</p>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Global variables
+        let allQuests = [];
+        let filteredQuests = [];
+        let currentUser = null;
+
         // Check authentication
         function checkAuth() {
-            const currentUser = sessionStorage.getItem('currentUser');
-            if (!currentUser) {
+            const userData = sessionStorage.getItem('currentUser');
+            if (!userData) {
                 window.location.href = 'student-login.html';
                 return null;
             }
-            return JSON.parse(currentUser);
+            return JSON.parse(userData);
         }
 
         // Logout function
@@ -181,54 +182,60 @@
             const deadline = new Date(deadlineStr);
             const today = new Date();
             today.setHours(0, 0, 0, 0);
+            deadline.setHours(0, 0, 0, 0);
+            
             const diffTime = deadline - today;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             
             if (diffDays < 0) return 'Overdue';
             if (diffDays === 0) return 'Today';
             if (diffDays === 1) return 'Tomorrow';
-            if (diffDays < 7) return `${diffDays} days`;
-            if (diffDays < 14) return '1 week';
-            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks`;
+            if (diffDays <= 7) return `${diffDays} days`;
+            if (diffDays <= 14) return '1 week';
+            if (diffDays <= 30) return `${Math.floor(diffDays / 7)} weeks`;
             return `${Math.floor(diffDays / 30)} months`;
         }
 
         // Load quests from localStorage
         function loadAllQuests() {
-            // Load quests created by lecturers
-            const savedQuests = JSON.parse(localStorage.getItem('quests')) || [];
-            
-            // Load user's accepted quests
-            const currentUser = checkAuth();
-            const acceptedQuestIds = JSON.parse(localStorage.getItem(`acceptedQuests_${currentUser.id}`)) || [];
-            
-            // Transform saved quests to display format
-            return savedQuests.map(quest => ({
-                id: quest.id,
-                title: quest.title,
-                category: getCategoryName(quest.category),
-                categorySlug: quest.category,
-                description: quest.description,
-                difficulty: quest.difficulty,
-                xpReward: quest.xpReward,
-                lecturer: quest.lecturerName,
-                deadline: getDaysUntilDeadline(quest.deadline),
-                deadlineDate: quest.deadline,
-                icon: quest.icon,
-                accepted: acceptedQuestIds.includes(quest.id),
-                hasPrerequisite: false,
-                popularity: Math.floor(Math.random() * 30) + 70, // Random popularity
-                createdAt: quest.createdAt
-            }));
+            try {
+                // Load quests created by lecturers
+                const savedQuests = JSON.parse(localStorage.getItem('quests')) || [];
+                
+                console.log('Loaded quests from localStorage:', savedQuests);
+                
+                // Load user's accepted quests
+                const acceptedQuestIds = JSON.parse(localStorage.getItem(`acceptedQuests_${currentUser.id}`)) || [];
+                
+                console.log('User accepted quests:', acceptedQuestIds);
+                
+                // Transform saved quests to display format
+                return savedQuests.map(quest => ({
+                    id: quest.id,
+                    title: quest.title,
+                    category: getCategoryName(quest.category),
+                    categorySlug: quest.category,
+                    description: quest.description,
+                    difficulty: quest.difficulty,
+                    xpReward: quest.xpReward,
+                    lecturer: quest.lecturerName,
+                    deadline: getDaysUntilDeadline(quest.deadline),
+                    deadlineDate: quest.deadline,
+                    icon: quest.icon,
+                    accepted: acceptedQuestIds.includes(quest.id),
+                    hasPrerequisite: false,
+                    popularity: Math.floor(Math.random() * 30) + 70,
+                    createdAt: quest.createdAt
+                }));
+            } catch (error) {
+                console.error('Error loading quests:', error);
+                return [];
+            }
         }
-
-        let allQuests = [];
-        let filteredQuests = [];
 
         // Load user data
         function loadUserData() {
-            const user = checkAuth();
-            if (!user) return;
+            if (!currentUser) return;
 
             const studentData = {
                 1: { name: 'Alex Johnson', displayName: 'DragonSlayer', level: 7 },
@@ -238,7 +245,7 @@
                 5: { name: 'John Smith', displayName: 'SpeedDemon', level: 4 }
             };
 
-            const data = studentData[user.id] || studentData[1];
+            const data = studentData[currentUser.id] || studentData[1];
 
             document.getElementById('userName').textContent = data.displayName;
             document.getElementById('userLevel').textContent = `Level ${data.level}`;
@@ -247,7 +254,9 @@
         // Render quests
         function renderQuests(quests) {
             const questsGrid = document.getElementById('questsGrid');
-            document.getElementById('questCount').textContent = quests.length;
+            const questCount = document.getElementById('questCount');
+            
+            questCount.textContent = quests.length;
 
             if (quests.length === 0) {
                 questsGrid.innerHTML = `
@@ -258,6 +267,11 @@
                         <p style="margin-top: 15px; font-size: 14px; color: #999;">
                             Lecturers can create new quests from the Lecturer Portal
                         </p>
+                        <button class="browse-btn" onclick="window.location.href='create-quest.html'" 
+                                style="margin-top: 20px; padding: 10px 20px; background: #667eea; 
+                                color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            Go to Lecturer Portal
+                        </button>
                     </div>
                 `;
                 return;
@@ -366,7 +380,10 @@
                 // Filter quests created in last week
                 const oneWeekAgo = new Date();
                 oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                filteredQuests = allQuests.filter(q => new Date(q.createdAt) >= oneWeekAgo);
+                filteredQuests = allQuests.filter(q => {
+                    const createdDate = new Date(q.createdAt);
+                    return createdDate >= oneWeekAgo;
+                });
             } else if (tag === 'popular') {
                 filteredQuests = allQuests.filter(q => q.popularity >= 85);
             } else if (tag === 'deadline') {
@@ -385,24 +402,30 @@
         function acceptQuest(event, questId) {
             event.stopPropagation();
             
-            const currentUser = checkAuth();
             if (!currentUser) return;
             
             const quest = allQuests.find(q => q.id === questId);
             if (quest) {
-                // Save accepted quest to localStorage
-                const acceptedQuestIds = JSON.parse(localStorage.getItem(`acceptedQuests_${currentUser.id}`)) || [];
-                if (!acceptedQuestIds.includes(questId)) {
-                    acceptedQuestIds.push(questId);
-                    localStorage.setItem(`acceptedQuests_${currentUser.id}`, JSON.stringify(acceptedQuestIds));
+                try {
+                    // Save accepted quest to localStorage
+                    const acceptedQuestIds = JSON.parse(localStorage.getItem(`acceptedQuests_${currentUser.id}`)) || [];
+                    
+                    if (!acceptedQuestIds.includes(questId)) {
+                        acceptedQuestIds.push(questId);
+                        localStorage.setItem(`acceptedQuests_${currentUser.id}`, JSON.stringify(acceptedQuestIds));
+                        console.log('Quest accepted:', questId);
+                    }
+                    
+                    // Update UI
+                    quest.accepted = true;
+                    renderQuests(filteredQuests);
+                    
+                    // Show notification
+                    alert(`✓ Quest "${quest.title}" accepted successfully!\nYou can now start working on it from "My Quests" page.`);
+                } catch (error) {
+                    console.error('Error accepting quest:', error);
+                    alert('Error accepting quest. Please try again.');
                 }
-                
-                // Update UI
-                quest.accepted = true;
-                renderQuests(filteredQuests);
-                
-                // Show notification
-                alert(`✓ Quest "${quest.title}" accepted successfully!\nYou can now start working on it from "My Quests" page.`);
             }
         }
 
@@ -417,20 +440,41 @@
             toggleBtns.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
-            // View change logic (grid/list view) can be implemented here
             console.log('View changed to:', view);
         }
 
-        // Initialize
-        window.addEventListener('DOMContentLoaded', function() {
+        // Initialize page
+        function initializePage() {
+            console.log('🎯 Initializing Quest Board...');
+            
+            // Check authentication
+            currentUser = checkAuth();
+            if (!currentUser) return;
+            
+            console.log('Current user:', currentUser);
+            
+            // Load user data
             loadUserData();
+            
+            // Load quests
             allQuests = loadAllQuests();
             filteredQuests = [...allQuests];
+            
+            console.log(`Loaded ${allQuests.length} quests`);
+            
+            // Render quests
             renderQuests(filteredQuests);
             
-            console.log('%c🎯 Quest Board Loaded', 'color: #667eea; font-size: 16px; font-weight: bold;');
+            console.log('%c🎯 Quest Board Loaded Successfully', 'color: #667eea; font-size: 16px; font-weight: bold;');
             console.log(`%c${allQuests.length} quests available from localStorage`, 'color: #764ba2; font-size: 14px;');
-        });
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePage);
+        } else {
+            initializePage();
+        }
     </script>
     
 </body>
