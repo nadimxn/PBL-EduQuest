@@ -122,7 +122,7 @@
         <!-- Quest Stats and View Toggle -->
         <div class="quest-stats">
             <div class="quest-count">
-                <span id="questCount">12</span> Quests Available
+                <span id="questCount">0</span> Quests Available
             </div>
             <div class="view-toggle">
                 <button class="toggle-btn active" onclick="changeView('grid')" title="Grid View">
@@ -163,218 +163,67 @@
             window.location.href = 'student-login.html';
         }
 
-        // Mock quest data (will be replaced with database)
-        const allQuests = [
-            {
-                id: 1,
-                title: 'Database Normalization Master',
-                category: 'Database Design',
-                categorySlug: 'database',
-                description: 'Learn to normalize databases to 3NF. Design a comprehensive database schema for a university management system.',
-                difficulty: 'hard',
-                xpReward: 350,
-                lecturer: 'Dr. Sarah Chen',
-                deadline: '3 days',
-                icon: '📊',
-                accepted: true,
-                hasPrerequisite: false,
-                popularity: 85
-            },
-            {
-                id: 2,
-                title: 'Build a Portfolio Website',
-                category: 'Web Development',
-                categorySlug: 'web',
-                description: 'Create a responsive personal portfolio website using HTML5, CSS3, and JavaScript. Must include animations and mobile-first design.',
-                difficulty: 'medium',
-                xpReward: 250,
-                lecturer: 'Prof. Ahmad Rahman',
-                deadline: '5 days',
-                icon: '🌐',
-                accepted: true,
-                hasPrerequisite: false,
-                popularity: 92
-            },
-            {
-                id: 3,
-                title: 'SQL Query Mastery',
-                category: 'Database Design',
-                categorySlug: 'database',
-                description: 'Master complex SQL queries including joins, subqueries, and window functions. Complete 20 advanced query challenges.',
-                difficulty: 'hard',
-                xpReward: 400,
-                lecturer: 'Dr. Sarah Chen',
-                deadline: '1 week',
-                icon: '💾',
-                accepted: false,
-                hasPrerequisite: true,
-                popularity: 78
-            },
-            {
-                id: 4,
-                title: 'JavaScript Algorithm Challenge',
-                category: 'Programming',
-                categorySlug: 'programming',
-                description: 'Solve 10 algorithmic problems using JavaScript. Focus on data structures, sorting, and searching algorithms.',
-                difficulty: 'medium',
-                xpReward: 300,
-                lecturer: 'Dr. Lisa Wong',
-                deadline: '7 days',
-                icon: '💻',
-                accepted: true,
-                hasPrerequisite: false,
-                popularity: 88
-            },
-            {
-                id: 5,
-                title: 'React Component Library',
-                category: 'Web Development',
-                categorySlug: 'web',
-                description: 'Build a reusable component library with React. Include buttons, forms, modals, and navigation components with documentation.',
-                difficulty: 'epic',
-                xpReward: 500,
-                lecturer: 'Prof. Ahmad Rahman',
-                deadline: '2 weeks',
-                icon: '⚛️',
-                accepted: false,
-                hasPrerequisite: true,
-                popularity: 95
-            },
-            {
-                id: 6,
-                title: 'Python Data Analysis',
-                category: 'Programming',
-                categorySlug: 'programming',
-                description: 'Analyze a large dataset using Python, pandas, and matplotlib. Create visualizations and draw meaningful insights.',
-                difficulty: 'medium',
-                xpReward: 280,
-                lecturer: 'Dr. James Taylor',
-                deadline: '10 days',
-                icon: '🐍',
-                accepted: false,
-                hasPrerequisite: false,
-                popularity: 82
-            },
-            {
-                id: 7,
-                title: 'CSS Flexbox & Grid Mastery',
-                category: 'Web Development',
-                categorySlug: 'web',
-                description: 'Master modern CSS layout techniques. Build 5 responsive layouts using Flexbox and CSS Grid.',
-                difficulty: 'easy',
-                xpReward: 150,
-                lecturer: 'Prof. Ahmad Rahman',
-                deadline: '4 days',
-                icon: '🎨',
-                accepted: false,
-                hasPrerequisite: false,
-                popularity: 90
-            },
-            {
-                id: 8,
-                title: 'Network Security Fundamentals',
-                category: 'Security',
-                categorySlug: 'security',
-                description: 'Learn about encryption, SSL/TLS, firewalls, and common security vulnerabilities. Complete hands-on labs.',
-                difficulty: 'hard',
-                xpReward: 380,
-                lecturer: 'Dr. Kevin Martinez',
-                deadline: '2 weeks',
-                icon: '🔒',
-                accepted: false,
-                hasPrerequisite: false,
-                popularity: 75
-            },
-            {
-                id: 9,
-                title: 'RESTful API Development',
-                category: 'Web Development',
-                categorySlug: 'web',
-                description: 'Design and build a RESTful API using Node.js and Express. Implement CRUD operations, authentication, and documentation.',
-                difficulty: 'hard',
-                xpReward: 420,
-                lecturer: 'Dr. Lisa Wong',
-                deadline: '12 days',
-                icon: '🔌',
-                accepted: false,
-                hasPrerequisite: false,
-                popularity: 87
-            },
-            {
-                id: 10,
-                title: 'Data Structures in C++',
-                category: 'Algorithms',
-                categorySlug: 'algorithms',
-                description: 'Implement common data structures from scratch: linked lists, stacks, queues, trees, and hash tables.',
-                difficulty: 'hard',
-                xpReward: 450,
-                lecturer: 'Prof. Robert Lee',
-                deadline: '15 days',
-                icon: '🌳',
-                accepted: false,
-                hasPrerequisite: true,
-                popularity: 70
-            },
-            {
-                id: 11,
-                title: 'Git & Version Control',
-                category: 'Programming',
-                categorySlug: 'programming',
-                description: 'Master Git commands, branching strategies, merge conflicts, and collaborative workflows using GitHub.',
-                difficulty: 'easy',
-                xpReward: 120,
-                lecturer: 'Dr. Sarah Chen',
-                deadline: '3 days',
-                icon: '📌',
-                accepted: false,
-                hasPrerequisite: false,
-                popularity: 93
-            },
-            {
-                id: 12,
-                title: 'Machine Learning Basics',
-                category: 'Algorithms',
-                categorySlug: 'algorithms',
-                description: 'Introduction to supervised learning. Build and train linear regression and classification models using scikit-learn.',
-                difficulty: 'epic',
-                xpReward: 550,
-                lecturer: 'Dr. Jennifer Park',
-                deadline: '3 weeks',
-                icon: '🤖',
-                accepted: false,
-                hasPrerequisite: true,
-                popularity: 98
-            }
-        ]; 
-        // 🔥 ADD lecturer-created quests (from localStorage)
-const lecturerQuests = JSON.parse(localStorage.getItem('quests')) || [];
+        // Get category display name
+        function getCategoryName(slug) {
+            const categories = {
+                'database': 'Database Design',
+                'web': 'Web Development',
+                'programming': 'Programming',
+                'algorithms': 'Algorithms',
+                'networking': 'Networking',
+                'security': 'Security'
+            };
+            return categories[slug] || slug;
+        }
 
-// Normalize lecturer quests to match UI structure
-lecturerQuests.forEach(q => {
-    allQuests.push({
-        id: q.id,
-        title: q.title,
-        category: q.category,
-        categorySlug: q.category,        // REQUIRED for filters
-        description: q.description,
-        difficulty: q.difficulty,
-        xpReward: q.xpReward,
-        lecturer: q.lecturer,
-        deadline: q.deadline,
-        icon: q.icon,
-        accepted: false,
-        hasPrerequisite: false,
-        popularity: 50                   // default
-    });
-});
+        // Calculate days until deadline
+        function getDaysUntilDeadline(deadlineStr) {
+            const deadline = new Date(deadlineStr);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const diffTime = deadline - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) return 'Overdue';
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Tomorrow';
+            if (diffDays < 7) return `${diffDays} days`;
+            if (diffDays < 14) return '1 week';
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks`;
+            return `${Math.floor(diffDays / 30)} months`;
+        }
 
-        
+        // Load quests from localStorage
+        function loadAllQuests() {
+            // Load quests created by lecturers
+            const savedQuests = JSON.parse(localStorage.getItem('quests')) || [];
+            
+            // Load user's accepted quests
+            const currentUser = checkAuth();
+            const acceptedQuestIds = JSON.parse(localStorage.getItem(`acceptedQuests_${currentUser.id}`)) || [];
+            
+            // Transform saved quests to display format
+            return savedQuests.map(quest => ({
+                id: quest.id,
+                title: quest.title,
+                category: getCategoryName(quest.category),
+                categorySlug: quest.category,
+                description: quest.description,
+                difficulty: quest.difficulty,
+                xpReward: quest.xpReward,
+                lecturer: quest.lecturerName,
+                deadline: getDaysUntilDeadline(quest.deadline),
+                deadlineDate: quest.deadline,
+                icon: quest.icon,
+                accepted: acceptedQuestIds.includes(quest.id),
+                hasPrerequisite: false,
+                popularity: Math.floor(Math.random() * 30) + 70, // Random popularity
+                createdAt: quest.createdAt
+            }));
+        }
 
-       // let filteredQuests = [...allQuests]; //
-        const allQuests = JSON.parse(localStorage.getItem('quests')) || [];
-
-        renderQuests(allQuests);
-
+        let allQuests = [];
+        let filteredQuests = [];
 
         // Load user data
         function loadUserData() {
@@ -406,6 +255,9 @@ lecturerQuests.forEach(q => {
                         <div class="empty-icon">🔍</div>
                         <h3>No quests found</h3>
                         <p>Try adjusting your filters or search criteria</p>
+                        <p style="margin-top: 15px; font-size: 14px; color: #999;">
+                            Lecturers can create new quests from the Lecturer Portal
+                        </p>
                     </div>
                 `;
                 return;
@@ -511,14 +363,19 @@ lecturerQuests.forEach(q => {
             if (tag === 'all') {
                 filteredQuests = [...allQuests];
             } else if (tag === 'new') {
-                // Filter quests created in last week (mock: random selection)
-                filteredQuests = allQuests.filter(q => q.id >= 9);
+                // Filter quests created in last week
+                const oneWeekAgo = new Date();
+                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                filteredQuests = allQuests.filter(q => new Date(q.createdAt) >= oneWeekAgo);
             } else if (tag === 'popular') {
                 filteredQuests = allQuests.filter(q => q.popularity >= 85);
             } else if (tag === 'deadline') {
-                filteredQuests = allQuests.filter(q => 
-                    q.deadline.includes('day') && parseInt(q.deadline) <= 5
-                );
+                filteredQuests = allQuests.filter(q => {
+                    const deadline = new Date(q.deadlineDate);
+                    const today = new Date();
+                    const diffDays = Math.ceil((deadline - today) / (1000 * 60 * 60 * 24));
+                    return diffDays >= 0 && diffDays <= 5;
+                });
             }
 
             renderQuests(filteredQuests);
@@ -528,8 +385,19 @@ lecturerQuests.forEach(q => {
         function acceptQuest(event, questId) {
             event.stopPropagation();
             
+            const currentUser = checkAuth();
+            if (!currentUser) return;
+            
             const quest = allQuests.find(q => q.id === questId);
             if (quest) {
+                // Save accepted quest to localStorage
+                const acceptedQuestIds = JSON.parse(localStorage.getItem(`acceptedQuests_${currentUser.id}`)) || [];
+                if (!acceptedQuestIds.includes(questId)) {
+                    acceptedQuestIds.push(questId);
+                    localStorage.setItem(`acceptedQuests_${currentUser.id}`, JSON.stringify(acceptedQuestIds));
+                }
+                
+                // Update UI
                 quest.accepted = true;
                 renderQuests(filteredQuests);
                 
@@ -542,10 +410,6 @@ lecturerQuests.forEach(q => {
         function viewQuestDetail(questId) {
             window.location.href = `quest-detail.html?id=${questId}`;
         }
-window.addEventListener('DOMContentLoaded', function() {
-    loadUserData();
-    renderQuests(allQuests);
-});
 
         // Change view
         function changeView(view) {
@@ -560,12 +424,13 @@ window.addEventListener('DOMContentLoaded', function() {
         // Initialize
         window.addEventListener('DOMContentLoaded', function() {
             loadUserData();
-            renderQuests(allQuests);
+            allQuests = loadAllQuests();
+            filteredQuests = [...allQuests];
+            renderQuests(filteredQuests);
+            
+            console.log('%c🎯 Quest Board Loaded', 'color: #667eea; font-size: 16px; font-weight: bold;');
+            console.log(`%c${allQuests.length} quests available from localStorage`, 'color: #764ba2; font-size: 14px;');
         });
-
-        // Console log
-        console.log('%c🎯 Quest Board Loaded', 'color: #667eea; font-size: 16px; font-weight: bold;');
-        console.log(`%c${allQuests.length} quests available`, 'color: #764ba2; font-size: 14px;');
     </script>
     
 </body>

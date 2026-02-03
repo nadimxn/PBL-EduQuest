@@ -25,8 +25,8 @@
             <div class="user-profile">
                 <div class="user-avatar">🎓</div>
                 <div class="user-info">
-                    <div class="user-name" id="userName">Dr. Sarah Chen</div>
-                    <div class="user-title">Associate Professor</div>
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-title" id="userTitle">Loading...</div>
                 </div>
             </div>
             <button class="logout-btn" onclick="logout()">Logout</button>
@@ -39,7 +39,7 @@
         <div class="welcome-section">
             <div class="welcome-header">
                 <div class="welcome-text">
-                    <h1>Welcome back, Dr. Chen! 🎓</h1>
+                    <h1 id="welcomeMessage">Welcome back! 🎓</h1>
                     <p>Here's what's happening with your quests today</p>
                 </div>
                 <div class="quick-actions">
@@ -58,9 +58,9 @@
             <div class="stat-card">
                 <div class="stat-header">
                     <div class="stat-icon">📤</div>
-                    <span class="stat-trend up">+3 new</span>
+                    <span class="stat-trend up" id="newSubmissions">+0 new</span>
                 </div>
-                <div class="stat-value">8</div>
+                <div class="stat-value" id="pendingSubmissions">0</div>
                 <div class="stat-label">Pending Submissions</div>
             </div>
 
@@ -69,7 +69,7 @@
                     <div class="stat-icon">🎯</div>
                     <span class="stat-trend">Active</span>
                 </div>
-                <div class="stat-value">12</div>
+                <div class="stat-value" id="activeQuests">0</div>
                 <div class="stat-label">Active Quests</div>
             </div>
 
@@ -106,61 +106,63 @@
                         <a href="grade-submission.html" class="view-all-link">View All →</a>
                     </div>
 
-                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=1'">
-                        <div class="submission-header">
-                            <div class="submission-student">
-                                <div class="student-avatar">⚔️</div>
-                                <div class="student-info">
-                                    <h3>Alex Johnson</h3>
-                                    <p>Level 7 • DragonSlayer</p>
+                    <div id="submissionsContainer">
+                        <div class="submission-item" onclick="window.location.href='grade-submission.html?id=1'">
+                            <div class="submission-header">
+                                <div class="submission-student">
+                                    <div class="student-avatar">⚔️</div>
+                                    <div class="student-info">
+                                        <h3>Alex Johnson</h3>
+                                        <p>Level 7 • DragonSlayer</p>
+                                    </div>
                                 </div>
+                                <span class="submission-time">2 hours ago</span>
                             </div>
-                            <span class="submission-time">2 hours ago</span>
+                            <div class="submission-quest">
+                                📊 <strong>Database Normalization Master</strong>
+                            </div>
+                            <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(1)">
+                                Grade Now
+                            </button>
                         </div>
-                        <div class="submission-quest">
-                            📊 <strong>Database Normalization Master</strong>
-                        </div>
-                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(1)">
-                            Grade Now
-                        </button>
-                    </div>
 
-                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=2'">
-                        <div class="submission-header">
-                            <div class="submission-student">
-                                <div class="student-avatar">🎨</div>
-                                <div class="student-info">
-                                    <h3>Emma Davis</h3>
-                                    <p>Level 5 • PixelQueen</p>
+                        <div class="submission-item" onclick="window.location.href='grade-submission.html?id=2'">
+                            <div class="submission-header">
+                                <div class="submission-student">
+                                    <div class="student-avatar">🎨</div>
+                                    <div class="student-info">
+                                        <h3>Emma Davis</h3>
+                                        <p>Level 5 • PixelQueen</p>
+                                    </div>
                                 </div>
+                                <span class="submission-time">5 hours ago</span>
                             </div>
-                            <span class="submission-time">5 hours ago</span>
+                            <div class="submission-quest">
+                                💾 <strong>SQL Query Mastery</strong>
+                            </div>
+                            <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(2)">
+                                Grade Now
+                            </button>
                         </div>
-                        <div class="submission-quest">
-                            💾 <strong>SQL Query Mastery</strong>
-                        </div>
-                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(2)">
-                            Grade Now
-                        </button>
-                    </div>
 
-                    <div class="submission-item" onclick="window.location.href='grade-submission.html?id=3'">
-                        <div class="submission-header">
-                            <div class="submission-student">
-                                <div class="student-avatar">⚡</div>
-                                <div class="student-info">
-                                    <h3>John Smith</h3>
-                                    <p>Level 4 • SpeedDemon</p>
+                        <div class="submission-item" onclick="window.location.href='grade-submission.html?id=3'">
+                            <div class="submission-header">
+                                <div class="submission-student">
+                                    <div class="student-avatar">⚡</div>
+                                    <div class="student-info">
+                                        <h3>John Smith</h3>
+                                        <p>Level 4 • SpeedDemon</p>
+                                    </div>
                                 </div>
+                                <span class="submission-time">Yesterday</span>
                             </div>
-                            <span class="submission-time">Yesterday</span>
+                            <div class="submission-quest">
+                                📊 <strong>Database Design Fundamentals</strong>
+                            </div>
+                            <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(3)">
+                                Grade Now
+                            </button>
                         </div>
-                        <div class="submission-quest">
-                            📊 <strong>Database Design Fundamentals</strong>
-                        </div>
-                        <button class="grade-btn" onclick="event.stopPropagation(); gradeSubmission(3)">
-                            Grade Now
-                        </button>
                     </div>
                 </div>
 
@@ -169,44 +171,18 @@
                     <div class="card-header">
                         <div class="card-header-left">
                             <span class="card-header-icon">🎯</span>
-                            <h2>Active Quests</h2>
+                            <h2>Your Active Quests</h2>
                         </div>
                         <a href="create-quest.html" class="view-all-link">Create New →</a>
                     </div>
 
-                    <div class="quest-item">
-                        <div class="quest-header-row">
-                            <div class="quest-title">Database Normalization Master</div>
-                        </div>
-                        <div class="quest-meta">
-                            <span class="meta-badge">⚔️ Hard</span>
-                            <span class="meta-badge">⭐ 350 XP</span>
-                            <span class="meta-badge">👥 32 enrolled</span>
-                            <span class="meta-badge">⏰ Due in 3 days</span>
-                        </div>
-                    </div>
-
-                    <div class="quest-item">
-                        <div class="quest-header-row">
-                            <div class="quest-title">SQL Query Mastery</div>
-                        </div>
-                        <div class="quest-meta">
-                            <span class="meta-badge">⚔️ Hard</span>
-                            <span class="meta-badge">⭐ 400 XP</span>
-                            <span class="meta-badge">👥 28 enrolled</span>
-                            <span class="meta-badge">⏰ Due in 1 week</span>
-                        </div>
-                    </div>
-
-                    <div class="quest-item">
-                        <div class="quest-header-row">
-                            <div class="quest-title">Database Design Fundamentals</div>
-                        </div>
-                        <div class="quest-meta">
-                            <span class="meta-badge">🟢 Easy</span>
-                            <span class="meta-badge">⭐ 150 XP</span>
-                            <span class="meta-badge">👥 45 enrolled</span>
-                            <span class="meta-badge">⏰ Due in 2 weeks</span>
+                    <div id="activeQuestsContainer">
+                        <!-- Quests will be loaded here -->
+                        <div style="text-align: center; padding: 40px; color: #999;">
+                            <p>No quests created yet</p>
+                            <p style="margin-top: 10px; font-size: 14px;">
+                                Click "Create Quest" to get started
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -348,13 +324,97 @@
             window.location.href = `grade-submission.html?id=${id}`;
         }
 
+        // Get difficulty badge HTML
+        function getDifficultyBadge(difficulty) {
+            const badges = {
+                'easy': '🟢 Easy',
+                'medium': '🟡 Medium',
+                'hard': '⚔️ Hard',
+                'epic': '🟣 Epic'
+            };
+            return badges[difficulty] || difficulty;
+        }
+
+        // Calculate days until deadline
+        function getDaysUntilDeadline(deadlineStr) {
+            const deadline = new Date(deadlineStr);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const diffTime = deadline - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 0) return 'Overdue';
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Tomorrow';
+            if (diffDays < 7) return `${diffDays} days`;
+            if (diffDays < 14) return '1 week';
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks`;
+            return `${Math.floor(diffDays / 30)} months`;
+        }
+
+        // Load lecturer's quests
+        function loadLecturerQuests() {
+            const currentUser = checkAuth();
+            if (!currentUser) return;
+
+            // Load all quests from localStorage
+            const allQuests = JSON.parse(localStorage.getItem('quests')) || [];
+            
+            // Filter quests created by this lecturer
+            const lecturerQuests = allQuests.filter(q => q.lecturerId === currentUser.id);
+
+            const container = document.getElementById('activeQuestsContainer');
+            
+            if (lecturerQuests.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #999;">
+                        <p>No quests created yet</p>
+                        <p style="margin-top: 10px; font-size: 14px;">
+                            Click "Create Quest" to get started
+                        </p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = lecturerQuests.map(quest => `
+                    <div class="quest-item">
+                        <div class="quest-header-row">
+                            <div class="quest-title">${quest.icon} ${quest.title}</div>
+                        </div>
+                        <div class="quest-meta">
+                            <span class="meta-badge">${getDifficultyBadge(quest.difficulty)}</span>
+                            <span class="meta-badge">⭐ ${quest.xpReward} XP</span>
+                            <span class="meta-badge">👥 ${Math.floor(Math.random() * 50) + 10} enrolled</span>
+                            <span class="meta-badge">⏰ Due in ${getDaysUntilDeadline(quest.deadline)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Update stats
+            document.getElementById('activeQuests').textContent = lecturerQuests.length;
+        }
+
+        // Load lecturer data
+        function loadLecturerData() {
+            const user = checkAuth();
+            if (!user) return;
+
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userTitle').textContent = user.title || 'Lecturer';
+            document.getElementById('welcomeMessage').textContent = `Welcome back, ${user.name.split(' ')[0]}! 🎓`;
+        }
+
         // Initialize
         window.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
+            loadLecturerData();
+            loadLecturerQuests();
+            
+            const currentUser = checkAuth();
+            console.log('%c🎓 Lecturer Dashboard Loaded', 'color: #f5576c; font-size: 16px; font-weight: bold;');
+            if (currentUser) {
+                console.log(`%c${currentUser.name} - ${currentUser.title}`, 'color: #f093fb; font-size: 14px;');
+            }
         });
-
-        console.log('%c🎓 Lecturer Dashboard Loaded', 'color: #f5576c; font-size: 16px; font-weight: bold;');
-        console.log('%cDr. Sarah Chen - Associate Professor', 'color: #f093fb; font-size: 14px;');
     </script>
 </body>
 </html>
